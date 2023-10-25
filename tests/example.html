@@ -1,0 +1,8 @@
+<b>{{.Title}}</b>
+<ul>
+	{{range .List}} {{if .Is}}
+	<li class="done">{{.Title}}</li>
+	{{else}}
+	<li>{{.Title}}</li>
+	{{end}} {{end}}
+</ul>
