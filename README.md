@@ -1,6 +1,6 @@
 <p align="center"><img src="assets/logo.svg" alt="ply logo"></p>
 
-# What is Ply
+# What is Ply ?
 
 Ply is a Go module made to easily create and **compose** your HTML page by just writing HTML.
 
@@ -14,9 +14,9 @@ So don't get your expectations to high !
 go get github.com/dnazirso/ply
 ```
 
-## Usage
+# Usage
 
-### Example
+## Example
 
 folder structure example:
 
@@ -140,3 +140,42 @@ You can compose you plies as you wish
 	<ply>
 </ply>
 ```
+
+# Possibilities
+
+At this stage you might have guessed that you can prepare your application however you'd like.
+
+Having your `index.html` loading things on the go while being a `<ply>` component itself.
+
+```html
+<ply as="pages/index">
+	<!doctype html>
+	<html lang="en">
+		<head>
+			<ply as="components/title"></ply>
+			<meta charset="UTF-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<link href="css/style.css" rel="stylesheet" />
+			<ply as="style/landing_page"></ply>
+		</head>
+		<body>
+			{{.Children}}
+		</body>
+	</html>
+</ply>
+```
+
+# What about API calls ?
+
+One word : **[HTMX !!!](https://htmx.org/)**
+
+You can go nut about using it. You have multiple possiblities of integration with **Ply**.
+
+- Download and use as an asset
+- Copy past the js in a `<script>` tag
+- Copy past the js in a `<script>` tag as a `<ply>` template 
+- CDN link in your `index.html`
+- CDN link in your `<ply>` templates
+- CDN link as a `<ply>` template
+
+> **N.B:** Except for the first two solutions, the others are pointless or not recommended... but hey!... It's your app, I won't judge !
