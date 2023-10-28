@@ -1,10 +1,8 @@
-# Ply
+<p align="center"><img src="assets/logo.svg" alt="ply logo"></p>
 
----
+# What is Ply
 
-## What is **Ply**
-
-Ply is a small Go library made to easily create and **compose** your HTML page by just writing... well... HTML !!!
+Ply is a Go library made to easily create and **compose** your HTML page by just writing HTML.
 
 # :warning: WORK IN PROGRESS
 
@@ -87,9 +85,9 @@ components/hello.html
 <p>{{.Hello}} {{.Children}}</p>
 ```
 
-### How does it works ?
+## How does it works ?
 
-#### Ply Tag
+### Ply Tag
 
 Pretty straight forward :
 
@@ -100,7 +98,7 @@ and call the `ply.Fold()` method to parse your template :
 tmpl, _ := template.New("index").Parse(ply.Fold("path/to/my/template", ""))
 ```
 
-#### Children
+### Children
 
 You can pass a children to your ply.
 
@@ -116,15 +114,15 @@ Do not forget to place the `{{.Children}}` in your component (or don't place it 
 <p>{{.Children}} place</p>
 ```
 
-#### Composition
+### Composition
 
 You can compose you plies as you wish
 
 ```html
 <ply as="path/to/a/component">
 	<ply as="another/one">
-		<ply as="another/one">but with a child<ply>
-		<ply as="yet/another/component">
+		<ply as="another/one">but with a child</ply>
+		<ply as="yet/another/component"></ply>
 		<ply as="you/get/the">idea</ply>
 	<ply>
 </ply>
