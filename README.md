@@ -2,7 +2,7 @@
 
 # What is Ply
 
-Ply is a Go library made to easily create and **compose** your HTML page by just writing HTML.
+Ply is a Go module made to easily create and **compose** your HTML page by just writing HTML.
 
 # :warning: WORK IN PROGRESS
 
@@ -112,6 +112,19 @@ Do not forget to place the `{{.Children}}` in your component (or don't place it 
 
 ```html
 <p>{{.Children}} place</p>
+```
+
+### Injection
+
+The second argument of the `ply.Fold()` method represents the `{{.Children}}` of your template. It can be populated by whatever you need as a string.
+
+If you need a template taking place of a `{{.Children}}` space within another template, it is possible to inject a Go template into another Go template as a string.
+
+```Go
+inner_tmpl, _ := template.New("index").Parse(ply.Fold("inner", ""))
+inner_as_string := inner_tmpl.Tree.Root.String()
+
+outer_tmpl, _ := template.New("index").Parse(ply.Fold("outer", inner_as_string))
 ```
 
 ### Composition
