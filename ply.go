@@ -1,6 +1,7 @@
 package ply
 
 import (
+	"regexp"
 	"strings"
 	"text/template"
 )
@@ -21,7 +22,7 @@ func componentBuilder(tmplStr string) string {
 	return tmplStr
 }
 
-func Fold(componentPath string, children string) string {
+func fold(componentPath string, children string) string {
 	tmpl, _ := template.ParseFiles(componentPath + ".html")
 	tmplStr := tmpl.Tree.Root.String()
 
@@ -33,5 +34,26 @@ func Fold(componentPath string, children string) string {
 		tmplStr = componentBuilder(tmplStr)
 	}
 
+	return tmplStr
+}
+
+func minify(tmplStr string) string {
+	regex := regexp.MustCompile(`\n\s*`)
+
+	tmplStr = regex.ReplaceAllString(tmplStr, "")
+
+	// (<script.*)(\s*\S*)*(</script>)
+
+	return tmplStr
+}
+
+func Fold(componentPath string, children string) string {
+	tmplStr := fold(componentPath, children)
+
+	for strings.Contains(tmplStr, "<ply") {
+		tmplStr = componentBuilder(tmplStr)
+	}
+
+	tmplStr = minify(tmplStr)
 	return tmplStr
 }
