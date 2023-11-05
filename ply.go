@@ -15,7 +15,7 @@ func componentBuilder(tmplStr string) string {
 
 	componentPath := isolateArr[1]
 	children := isolateArr[2][1:]
-	component := Fold(componentPath, children)
+	component := fold(componentPath, children)
 
 	tmplStr = tmplStr[:lastPlyIndex] + component + tmplStr[lastPlyIndex+followingEndPlyIndex+6:]
 
@@ -37,12 +37,27 @@ func fold(componentPath string, children string) string {
 	return tmplStr
 }
 
-func minify(tmplStr string) string {
+func isolateScripts(tmplStr string) (string, []string) {
+	isolateArr := []string{}
+
+	for strings.Contains(tmplStr, "<script") {
+
+		lastScriptIndex := strings.LastIndex(tmplStr, "<script")
+		endScriptIndex := strings.Index(tmplStr[lastScriptIndex:], "</script>")
+
+		isolate := tmplStr[lastScriptIndex:(lastScriptIndex + endScriptIndex + 9)]
+		isolateArr = append(isolateArr, isolate)
+
+		tmplStr = tmplStr[:lastScriptIndex] + tmplStr[lastScriptIndex+endScriptIndex+9:]
+	}
+
+	return tmplStr, isolateArr
+}
+
+func replaceBlanks(tmplStr string) string {
 	regex := regexp.MustCompile(`\n\s*`)
 
 	tmplStr = regex.ReplaceAllString(tmplStr, " ")
-
-	// (<script.*)(\s*\S*)*(</script>)
 
 	return tmplStr
 }
@@ -54,6 +69,13 @@ func Fold(componentPath string, children string) string {
 		tmplStr = componentBuilder(tmplStr)
 	}
 
-	tmplStr = minify(tmplStr)
+	tmplStr, scripts := isolateScripts(tmplStr)
+
+	tmplStr = replaceBlanks(tmplStr)
+
+	for _, v := range scripts {
+		tmplStr += v
+	}
+
 	return tmplStr
 }
