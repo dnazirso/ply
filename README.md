@@ -4,10 +4,6 @@
 
 Ply is a Go module made to easily create and **compose** your HTML page by just writing HTML.
 
-# :warning: WORK IN PROGRESS
-
-So don't get your expectations to high !
-
 ## Install
 
 ```bash
@@ -69,9 +65,6 @@ pages/index.html
 <html lang="en">
 	<head>
 		<title>Your APP</title>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link href="css/style.css" rel="stylesheet" />
 	</head>
 	<body>
 		<ply as="components/hello">World !</ply>
@@ -100,7 +93,7 @@ tmpl, _ := template.New("index").Parse(ply.Fold("path/to/my/template", ""))
 
 ### Children
 
-You can pass a children to your ply.
+You can pass a children to your ply components.
 
 ```html
 <ply as="path/to/your/component">
@@ -108,7 +101,7 @@ You can pass a children to your ply.
 </ply>
 ```
 
-Do not forget to place the `{{.Children}}` in your component (or don't place it but the children won't apprear)
+Place the `{{.Children}}` in your component.
 
 ```html
 <p>{{.Children}} place</p>
@@ -145,24 +138,60 @@ You can compose you plies as you wish
 
 At this stage you might have guessed that you can prepare your application however you'd like.
 
-Having your `index.html` loading things on the go while being a `<ply>` component itself.
+Having your `layout.html` loading things on the go while being a `<ply>` component itself.
 
+views/layout.html:
 ```html
-<ply as="pages/index">
-	<!doctype html>
-	<html lang="en">
-		<head>
-			<ply as="components/title"></ply>
-			<meta charset="UTF-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
-			<link href="css/style.css" rel="stylesheet" />
-			<ply as="style/landing_page"></ply>
-		</head>
-		<body>
-			{{.Children}}
-		</body>
-	</html>
-</ply>
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Your APP</title>
+	</head>
+	<body>
+		{{.Children}}
+	</body>
+</html>
+```
+
+views/landing.html:
+```html
+<ply as="views/layout">
+	<ply as="views/hero"></ply>
+	<h1>{{.Children}}<h1>
+</ply
+```
+
+views/hero.html:
+```html
+<div class="hero">
+	<img src="/public/hero.png" />
+</div>
+```
+
+landing.go
+```go
+func Landing(w http.ResponseWriter, r *http.Request) {
+	landing, _ := template.New("landing").Parse(ply.Fold("landing", "Welcome"))
+
+	tmpl.Execute(w, data)
+}
+```
+
+result: 
+```html
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Your APP</title>
+	</head>
+	<body>
+		<div class="hero">
+			<img src="/public/hero.png" />
+		</div>
+		<h1>Welcome<h1>
+	</body>
+</html>
+
 ```
 
 # What about API calls ?
