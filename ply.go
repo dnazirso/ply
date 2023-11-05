@@ -40,7 +40,7 @@ func fold(componentPath string, children string) string {
 func minify(tmplStr string) string {
 	regex := regexp.MustCompile(`\n\s*`)
 
-	tmplStr = regex.ReplaceAllString(tmplStr, "")
+	tmplStr = regex.ReplaceAllString(tmplStr, " ")
 
 	// (<script.*)(\s*\S*)*(</script>)
 
