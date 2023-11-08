@@ -73,9 +73,11 @@ func Fold(componentPath string, children string) string {
 
 	tmplStr = replaceBlanks(tmplStr)
 
-	for _, v := range scripts {
-		tmplStr += v
-	}
+	endBodyIndex := strings.Index(tmplStr, "</body>")
+
+	scriptPack := strings.Join(scripts, "")
+
+	tmplStr = tmplStr[:endBodyIndex] + "\n" + scriptPack + "\n" + tmplStr[endBodyIndex:]
 
 	return tmplStr
 }
