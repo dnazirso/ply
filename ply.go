@@ -14,8 +14,6 @@ func componentBuilder(tmplStr string) (string, error) {
 	isolate := tmplStr[lastPlyIndex:(lastPlyIndex + followingEndPlyIndex + 6)]
 	ply_part, contain_component_path, has_component := strings.Cut(isolate, "\"")
 
-	println(isolate)
-
 	if !strings.Contains(ply_part, "ply") {
 		return isolate, nil
 	}
