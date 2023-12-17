@@ -1,25 +1,42 @@
 package ply
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 	"text/template"
 )
 
-func componentBuilder(tmplStr string) string {
+func componentBuilder(tmplStr string) (string, error) {
 	lastPlyIndex := strings.LastIndex(tmplStr, "<ply")
 	followingEndPlyIndex := strings.Index(tmplStr[lastPlyIndex:], "</ply>")
 
-	isolate := tmplStr[lastPlyIndex:(lastPlyIndex + followingEndPlyIndex)]
-	isolateArr := strings.Split(isolate, "\"")
+	isolate := tmplStr[lastPlyIndex:(lastPlyIndex + followingEndPlyIndex + 6)]
+	ply_part, contain_component_path, has_component := strings.Cut(isolate, "\"")
 
-	componentPath := isolateArr[1]
-	children := isolateArr[2][1:]
-	component := fold(componentPath, children)
+	println(isolate)
+
+	if !strings.Contains(ply_part, "ply") {
+		return isolate, nil
+	}
+
+	if !strings.Contains(ply_part, "as") {
+		return "", fmt.Errorf(`doesn't contain path to component ("as" property not found)`)
+	}
+
+	if !has_component {
+		return "", fmt.Errorf(`has no component`)
+	}
+
+	component_path, contain_children, has_component := strings.Cut(contain_component_path, `"`)
+
+	children := contain_children[1:][:len(contain_children[1:])-6]
+
+	component := fold(component_path, children)
 
 	tmplStr = tmplStr[:lastPlyIndex] + component + tmplStr[lastPlyIndex+followingEndPlyIndex+6:]
 
-	return tmplStr
+	return tmplStr, nil
 }
 
 func fold(componentPath string, children string) string {
@@ -29,9 +46,13 @@ func fold(componentPath string, children string) string {
 	if strings.Contains(tmplStr, "{{.Children}}") {
 		tmplStr = strings.ReplaceAll(tmplStr, "{{.Children}}", children)
 	}
-
+	var err error
 	if strings.Contains(tmplStr, "<ply") {
-		tmplStr = componentBuilder(tmplStr)
+		tmplStr, err = componentBuilder(tmplStr)
+	}
+
+	if err != nil {
+		panic(err)
 	}
 
 	return tmplStr
@@ -65,8 +86,13 @@ func replaceBlanks(tmplStr string) string {
 func Fold(componentPath string, children string) string {
 	tmplStr := fold(componentPath, children)
 
+	var err error
 	for strings.Contains(tmplStr, "<ply") {
-		tmplStr = componentBuilder(tmplStr)
+		tmplStr, err = componentBuilder(tmplStr)
+	}
+
+	if err != nil {
+		panic(err)
 	}
 
 	tmplStr, scripts := isolateScripts(tmplStr)

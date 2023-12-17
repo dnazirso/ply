@@ -7,6 +7,11 @@
 		<link href="css/style.css" rel="stylesheet" />
 	</head>
 	<body>
-		<ply as="tests/layout">This is a children</ply>
+		<ply as="tests/layout">
+			<h1>Foo page !</h1>
+			<button type="input">Not a BAZ button !</button>
+			<a href="/foo">Foo to Bar</a>
+			{{.Children}}
+		</ply>
 	</body>
 </html>
