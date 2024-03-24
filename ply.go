@@ -2,6 +2,7 @@ package ply
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"strings"
 	"text/template"
@@ -50,28 +51,28 @@ func fold(componentPath string, children string) string {
 	}
 
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 
 	return tmplStr
 }
 
-func isolateScripts(tmplStr string) (string, []string) {
-	isolateArr := []string{}
-
-	for strings.Contains(tmplStr, "<script") {
-
-		lastScriptIndex := strings.LastIndex(tmplStr, "<script")
-		endScriptIndex := strings.Index(tmplStr[lastScriptIndex:], "</script>")
-
-		isolate := tmplStr[lastScriptIndex:(lastScriptIndex + endScriptIndex + 9)]
-		isolateArr = append(isolateArr, isolate)
-
-		tmplStr = tmplStr[:lastScriptIndex] + tmplStr[lastScriptIndex+endScriptIndex+9:]
-	}
-
-	return tmplStr, isolateArr
-}
+// func isolateScripts(tmplStr string) (string, []string) {
+// 	isolateArr := []string{}
+//
+// 	for strings.Contains(tmplStr, "<script") {
+//
+// 		lastScriptIndex := strings.LastIndex(tmplStr, "<script")
+// 		endScriptIndex := strings.Index(tmplStr[lastScriptIndex:], "</script>")
+//
+// 		isolate := tmplStr[lastScriptIndex:(lastScriptIndex + endScriptIndex + 9)]
+// 		isolateArr = append(isolateArr, isolate)
+//
+// 		tmplStr = tmplStr[:lastScriptIndex] + tmplStr[lastScriptIndex+endScriptIndex+9:]
+// 	}
+//
+// 	return tmplStr, isolateArr
+// }
 
 func replaceBlanks(tmplStr string) string {
 	regex := regexp.MustCompile(`\n\s*`)
@@ -90,18 +91,18 @@ func Fold(componentPath string, children string) string {
 	}
 
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 
-	tmplStr, scripts := isolateScripts(tmplStr)
+	// tmplStr, scripts := isolateScripts(tmplStr)
 
 	tmplStr = replaceBlanks(tmplStr)
 
-	endBodyIndex := strings.Index(tmplStr, "</body>")
+	// endBodyIndex := strings.Index(tmplStr, "</body>")
 
-	scriptPack := strings.Join(scripts, "")
+	// scriptPack := strings.Join(scripts, "")
 
-	tmplStr = tmplStr[:endBodyIndex] + "\n" + scriptPack + "\n" + tmplStr[endBodyIndex:]
+	// tmplStr = tmplStr[:endBodyIndex] + "\n" + scriptPack + "\n" + tmplStr[endBodyIndex:]
 
 	return tmplStr
 }
