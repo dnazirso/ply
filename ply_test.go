@@ -39,12 +39,12 @@ func TestPly(t *testing.T) {
 }
 
 func TestCut(t *testing.T) {
-	entire := `<ply as="path/to/component">this is the child you want to isolate from the component</ply>`
+	entire := `<ply src="path/to/component">this is the child you want to isolate from the component</ply>`
 	ply_part, contain_component_path, has_component := strings.Cut(entire, "\"")
 	t.Log(ply_part, contain_component_path, has_component)
 
-	if !strings.Contains(ply_part, "as") {
-		t.Error(`doesn't containe path to component ("as" property not found)`)
+	if !strings.Contains(ply_part, "src") {
+		t.Error(`doesn't containe path to component ("src" property not found)`)
 	}
 
 	if !has_component {
@@ -59,12 +59,12 @@ func TestCut(t *testing.T) {
 }
 
 func TestCutEmptyPly(t *testing.T) {
-	entire := `<ply as="path/to/component"></ply>`
+	entire := `<ply src="path/to/component"></ply>`
 	ply_part, contain_component_path, has_component := strings.Cut(entire, "\"")
 	t.Log(ply_part, contain_component_path, has_component)
 
-	if !strings.Contains(ply_part, "as") {
-		t.Error(`doesn't containe path to component ("as" property not found)`)
+	if !strings.Contains(ply_part, "src") {
+		t.Error(`doesn't containe path to component ("src" property not found)`)
 	}
 
 	if !has_component {
@@ -91,8 +91,8 @@ func TestCutNotPly(t *testing.T) {
 		return
 	}
 
-	if !strings.Contains(ply_part, "as") {
-		t.Error(`doesn't containe path to component ("as" property not found)`)
+	if !strings.Contains(ply_part, "src") {
+		t.Error(`doesn't containe path to component ("src" property not found)`)
 	}
 
 	if !has_component {

@@ -19,8 +19,8 @@ func componentBuilder(tmplStr string) (string, error) {
 		return isolate, nil
 	}
 
-	if !strings.Contains(ply_part, "as") {
-		return "", fmt.Errorf(`doesn't contain path to component ("as" property not found)`)
+	if !strings.Contains(ply_part, "src") {
+		return "", fmt.Errorf(`doesn't contain path to component ("src" property not found)`)
 	}
 
 	if !has_component {

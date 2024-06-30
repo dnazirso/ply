@@ -1,17 +1,20 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<title></title>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link href="css/style.css" rel="stylesheet" />
-	</head>
-	<body>
-		<ply as="tests/layout">
-			<h1>Foo page !</h1>
-			<button type="input">Not a BAZ button !</button>
-			<a href="/foo">Foo to Bar</a>
-			{{.Children}}
-		</ply>
-	</body>
+
+<head>
+	<title></title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+	<ply src="tests/layout">
+		<h1>Foo page !</h1>
+		<button type="input">Not a BAZ button !</button>
+		<a href="/foo">Foo to Bar</a>
+		{{.Children}}
+	</ply>
+</body>
+
 </html>
